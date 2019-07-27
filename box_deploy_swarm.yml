@@ -1,0 +1,9 @@
+- name: initialize docker swarm
+  hosts: swarm_master
+  tasks:
+    - include_tasks: components/tasks_docker_swarm_init.yml
+
+- name: add workers to the swarm
+  hosts: swarm_nodes
+  tasks:
+    - include_tasks: components/tasks_docker_swarm_add_worker.yml

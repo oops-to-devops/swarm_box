@@ -1,0 +1,40 @@
+---
+  # TODO: magic needs to be refactored with proper delegate_to
+-
+  - name: Detect manager hosts
+    set_fact:
+      master_hosts: "{{ groups['swarm_master'] | map('extract', hostvars, ['ansible_default_ipv4','address']) | list  }}"
+#      master_hosts: "{{ groups['swarm_master'] | map('extract', hostvars, ['ansible_default_ipv4','address']) | map('regex_replace', '^(.*)$','https://\\1:2377') | list  }}"
+    run_once: true
+
+  - debug: var="master_hosts"
+    run_once: true
+
+  - name: Define master address and token
+    set_fact:
+      master_address: "{{ master_hosts[0] }}"
+      worker_join_token: "{{ hostvars[master_hosts[0]]['worker_token']['stdout'] }}"
+    run_once: true
+
+  - debug: var="worker_join_token"
+    run_once: true
+
+  - name: Print master address
+    debug:
+      msg: "{{ master_address }}"
+    run_once: true
+
+#  - name: Get the worker join-token
+#    local_action: hostname #command docker swarm join-token --quiet worker
+#    delegate_to: swarm_master
+#    run_once: true
+#    become: yes
+#    register: worker_token
+#    tags:
+#      - swarm
+
+  - name: Add Workers to the Swarm
+    shell: "docker swarm join --token {{ worker_join_token }} {{ master_address }}:2377"
+    become: yes
+    tags:
+      - swarm

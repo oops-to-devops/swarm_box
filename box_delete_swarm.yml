@@ -1,0 +1,14 @@
+- name: Farewell workers
+  hosts: swarm_nodes
+  tasks:
+    - include_tasks: components/tasks_docker_swarm_leave.yml
+
+- name: Farewell secondary managers
+  hosts: swarm_managers
+  tasks:
+    - include_tasks: components/tasks_docker_swarm_leave.yml
+
+- name: Farewell masters
+  hosts: swarm_master
+  tasks:
+    - include_tasks: components/tasks_docker_swarm_leave.yml

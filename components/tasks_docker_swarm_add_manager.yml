@@ -1,0 +1,29 @@
+---
+  - name: Detect manager hosts
+    set_fact:
+      master_hosts: "{{ groups['swarm_master'] | map('extract', hostvars, ['ansible_default_ipv4','address']) | list  }}"
+    #      master_hosts: "{{ groups['swarm_master'] | map('extract', hostvars, ['ansible_default_ipv4','address']) | map('regex_replace', '^(.*)$','https://\\1:2377') | list  }}"
+    run_once: true
+
+  - debug: var="master_hosts"
+    run_once: true
+
+  - name: Define master address and token
+    set_fact:
+      master_address: "{{ master_hosts[0] }}"
+      manager_join_token: "{{ hostvars[master_hosts[0]]['manager_token']['stdout'] }}"
+    run_once: true
+
+  - debug: var="worker_join_token"
+    run_once: true
+
+  - name: Print master address
+    debug:
+      msg: "{{ master_address }}"
+    run_once: true
+
+  - name: Add Manager to the Swarm
+    shell: "docker swarm join --token {{ manager_join_token }} {{ master_address }}:2377"
+    become: yes
+    tags:
+      - swarm
