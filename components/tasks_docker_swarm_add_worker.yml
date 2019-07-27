@@ -1,6 +1,5 @@
 ---
   # TODO: magic needs to be refactored with proper delegate_to
--
   - name: Detect manager hosts
     set_fact:
       master_hosts: "{{ groups['swarm_master'] | map('extract', hostvars, ['ansible_default_ipv4','address']) | list  }}"
