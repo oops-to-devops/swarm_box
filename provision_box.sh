@@ -4,8 +4,8 @@ WORKSPACE=$(
   cd $(dirname "$0")
   pwd
 )
-BOX_PLAYBOOK=$WORKSPACE/box_deploy_swarm.yml
-BOX_NAME=awx_box
+BOX_PLAYBOOK=$WORKSPACE/playbook.yml
+BOX_NAME=swarm_box
 BOX_ADDRESS=$REMOTE_HOST
 BOX_USER=$BOX_DEPLOY_USER
 BOX_PWD=$BOX_DEPLOY_PASS

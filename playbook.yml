@@ -3,7 +3,12 @@
   tasks:
     - include_tasks: components/tasks_docker_swarm_init.yml
 
+- name: add managers to the swarm
+  hosts: swarm_managers
+  tasks:
+    - include_tasks: components/tasks_docker_swarm_add_manager.yml
+
 - name: add workers to the swarm
-  hosts: swarm_nodes
+  hosts: swarm_workers
   tasks:
     - include_tasks: components/tasks_docker_swarm_add_worker.yml
