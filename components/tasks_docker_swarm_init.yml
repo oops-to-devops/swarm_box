@@ -7,10 +7,44 @@
     tags:
       - swarm
 
+  - block:
+
+    - name: Detect swarm advertised ip address
+      set_fact:
+          swarm_master_address: "{{ item }}"
+      when: "item | ipaddr(swarm_address_mask)"
+      with_items: "{{ ansible_all_ipv4_addresses }}"
+
+    - set_fact:
+        swarm_target_interface: "{{ item }}"
+      when: >
+        (hostvars[inventory_hostname]['ansible_%s' % item]|default({}))
+        .get('ipv4', {}).get('address') == swarm_master_address
+        or
+        swarm_master_address in ((hostvars[inventory_hostname]['ansible_%s' % item]|default({}))
+        .get('ipv4_secondaries'))|map(attribute='address')|list
+      with_items:
+        - "{{ ansible_interfaces }}"
+
+    - debug:
+        msg: >-
+          found interface {{ swarm_target_interface }}
+          with address {{ swarm_master_address }}
+
+    when: swarm_address_mask is defined
+
+  - block:
+      - name: Detect swarm advertised ip address
+        set_fact:
+            swarm_master_address: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+    when: swarm_address_mask is not defined
+
+  - debug: msg="{{ swarm_master_address }}"
+
   - name: Initialize Docker Swarm
     shell: >
       docker swarm init
-      --advertise-addr={{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}:2377
+      --advertise-addr={{ swarm_master_address }}:2377
     when: swarm_status.rc != 0
     run_once: true
     become: yes
