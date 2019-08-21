@@ -1,21 +1,31 @@
 ---
 
-  - name: Define master address and token
-    set_fact:
-      master_address: "{{ hostvars[groups['swarm_master'][0]]['swarm_master_address'] }}"
-      manager_join_token: "{{ hostvars[groups['swarm_master'][0]]['manager_token']['stdout'] }}"
-    run_once: true
-
-  - debug: var="worker_join_token"
-    run_once: true
-
-  - name: Print master address
-    debug:
-      msg: "{{ master_address }}"
-    run_once: true
-
-  - name: Add Manager to the Swarm
-    shell: "docker swarm join --token {{ manager_join_token }} {{ master_address }}:2377"
+  - name: Detect swarm status
+    shell: docker info | grep Swarm | sed 's/Swarm: //g' | grep active
     become: yes
-    tags:
-      - swarm
+    register: already_in_swarm
+    ignore_errors: true
+
+  - block:
+
+    - name: Define master address and token
+      set_fact:
+        master_address: "{{ hostvars[groups['swarm_master'][0]]['swarm_master_address'] }}"
+        manager_join_token: "{{ hostvars[groups['swarm_master'][0]]['manager_token']['stdout'] }}"
+      run_once: true
+
+    - debug: var="worker_join_token"
+      run_once: true
+
+    - name: Print master address
+      debug:
+        msg: "{{ master_address }}"
+      run_once: true
+
+    - name: Add Manager to the Swarm
+      shell: "docker swarm join --token {{ manager_join_token }} {{ master_address }}:2377"
+      become: yes
+      tags:
+        - swarm
+
+    when: already_in_swarm is failed
