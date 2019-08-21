@@ -1,7 +1,7 @@
 ---
 
   - name: Detect swarm status
-    shell: docker info | grep Swarm | sed 's/Swarm: //g' | grep active
+    shell: "docker info | grep Swarm | sed 's/Swarm: //g' | grep active"
     become: yes
     register: already_in_swarm
     ignore_errors: true
