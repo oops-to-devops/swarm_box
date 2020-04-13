@@ -6,7 +6,7 @@ WORKSPACE=$(
   pwd
 )
 
-BOX_PLAYBOOK=$WORKSPACE/playbook.yml
+BOX_PLAYBOOK=$WORKSPACE/box_delete_swarm.yml
 BOX_NAME=${BOX_NAME:-unnamed_oops_box}
 BOX_ADDRESS=$REMOTE_HOST
 BOX_USER=$BOX_DEPLOY_USER
