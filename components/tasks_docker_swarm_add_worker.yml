@@ -1,9 +1,9 @@
 ---
 
   - name: Detect swarm status
-    shell: "docker info | grep Swarm | sed 's/Swarm: //g' | grep active"
+    shell: "docker info | grep Swarm | sed 's/Swarm: //g' | grep inactive"
     become: yes
-    register: already_in_swarm
+    register: not_in_swarm_yet
     ignore_errors: true
 
   - block:
@@ -37,4 +37,4 @@
       tags:
         - swarm
 
-    when: already_in_swarm is failed
+    when: not_in_swarm_yet is not failed
