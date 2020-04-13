@@ -5,3 +5,4 @@ runtime_inventory
 local_*.sh
 releases
 *.retry
+*.bak

@@ -1,14 +1,60 @@
 - name: initialize docker swarm
   hosts: swarm_master
+  vars:
+    - root_dir: "{{ playbook_dir }}"
+    - shared_dir: "{{ playbook_dir }}/../shared"
+  pre_tasks:
+    - debug: msg="Pre tasks section for {{ ansible_host }}"
+
+    - name: Check for common pretasks
+      local_action: stat path="{{ shared_dir }}/common_pretasks.yml"
+      register: common_pretasks_exists
+      tags: always
+
+    - name: Include common pretasks
+      include_tasks: "{{ shared_dir }}/common_pretasks.yml"
+      when: common_pretasks_exists.stat.exists == true
+      tags: always
+
   tasks:
     - include_tasks: components/tasks_docker_swarm_init.yml
 
 - name: add managers to the swarm
   hosts: swarm_managers
+  vars:
+    - root_dir: "{{ playbook_dir }}"
+    - shared_dir: "{{ playbook_dir }}/../shared"
+  pre_tasks:
+    - debug: msg="Pre tasks section for {{ ansible_host }}"
+
+    - name: Check for common pretasks
+      local_action: stat path="{{ shared_dir }}/common_pretasks.yml"
+      register: common_pretasks_exists
+      tags: always
+
+    - name: Include common pretasks
+      include_tasks: "{{ shared_dir }}/common_pretasks.yml"
+      when: common_pretasks_exists.stat.exists == true
+      tags: always
   tasks:
     - include_tasks: components/tasks_docker_swarm_add_manager.yml
 
 - name: add workers to the swarm
   hosts: swarm_workers
+  vars:
+    - root_dir: "{{ playbook_dir }}"
+    - shared_dir: "{{ playbook_dir }}/../shared"
+  pre_tasks:
+    - debug: msg="Pre tasks section for {{ ansible_host }}"
+
+    - name: Check for common pretasks
+      local_action: stat path="{{ shared_dir }}/common_pretasks.yml"
+      register: common_pretasks_exists
+      tags: always
+
+    - name: Include common pretasks
+      include_tasks: "{{ shared_dir }}/common_pretasks.yml"
+      when: common_pretasks_exists.stat.exists == true
+      tags: always
   tasks:
     - include_tasks: components/tasks_docker_swarm_add_worker.yml
