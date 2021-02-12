@@ -1,7 +1,7 @@
 namespace: "softasap"
 name: "swarm_box"
 description: Configures swarm cluster including masters, managers and worker nodes
-version: 0.7.0
+version: 0.8.0
 readme: "Readme.md"
 authors:
     - "Vyacheslav Voronenko"
