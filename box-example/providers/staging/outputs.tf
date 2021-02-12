@@ -32,7 +32,7 @@ INFRASTRUCTURE_ROOT_DIR=$(
   cd $(dirname "$0")
   pwd
 )
-export REMOTE_HOST=$INFRASTRUCTURE_ROOT_DIR/provisioners/shared/inventory/${local.env}/aws.aws_ec2.yml
+export REMOTE_HOST=$INFRASTRUCTURE_ROOT_DIR/provisioners/shared/inventory/${local.env}
 export ENV_INVENTORY=$INFRASTRUCTURE_ROOT_DIR/provisioners/shared/inventory/${local.env}
 export ANSIBLE_INVENTORY=$ENV_INVENTORY
 export REMOTE_USER_INITIAL=ubuntu
@@ -53,8 +53,8 @@ all: # keys must be unique, i.e. only one 'hosts' per group
             ansible_host: ${aws_instance.swarm_master.public_ip}
             ansible_user: ubuntu
         worker:
-            ansible_host: ${aws_instance.swarm_master.public_ip}
-            ansible_user: worker
+            ansible_host: ${aws_instance.swarm_worker.public_ip}
+            ansible_user: ubuntu
     vars:
         group_var1: value2
 
@@ -73,6 +73,10 @@ all: # keys must be unique, i.e. only one 'hosts' per group
             vars:
                 group_last_var: value
         docker_box:
+            hosts:
+                master:
+                worker:
+        glusterfs_box:
             hosts:
                 master:
                 worker:

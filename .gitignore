@@ -6,3 +6,6 @@ local_*.sh
 releases
 *.retry
 *.bak
+box-example/provisioners/1_base-box/
+box-example/provisioners/2_docker-box/
+box-example/provisioners/3_glusterfs-box/

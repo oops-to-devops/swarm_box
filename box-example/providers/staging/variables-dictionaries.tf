@@ -79,11 +79,11 @@ variable "environment_to_instance_profile_map" {
 variable "environment_to_availability_zone_1" {
   type = map(any)
   default = {
-    default = "eu-west-1a"
-    dev     = "eu-west-1a"
-    qa      = "eu-west-1a"
-    staging = "eu-west-1a"
-    prod    = "eu-west-1a"
+    default = "eu-west-1c"
+    dev     = "eu-west-1c"
+    qa      = "eu-west-1c"
+    staging = "eu-west-1c"
+    prod    = "eu-west-1c"
   }
 }
 
@@ -94,6 +94,6 @@ variable "environment_to_availability_zone_2" {
     dev     = "eu-west-1b"
     qa      = "eu-west-1b"
     staging = "eu-west-1b"
-    prod    = "eu-west-1c"
+    prod    = "eu-west-1b"
   }
 }

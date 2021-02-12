@@ -64,6 +64,53 @@ resource "aws_security_group" "swarm_demo" {
       self = true
     }
 
+    ingress {
+      from_port   = 24007
+      to_port     = 24007
+      protocol    = "tcp"
+      self = true
+      description = "Gluster Daemon"
+    }
+
+    ingress {
+      from_port   = 24008
+      to_port     = 24008
+      protocol    = "tcp"
+      self = true
+      description = "Gluster Management"
+    }
+
+    ingress {
+      from_port   = 38465
+      to_port     = 38467
+      protocol    = "tcp"
+      self = true
+      description = "Gluster NFS service"
+    }
+
+    ingress {
+      from_port   = 49152
+      to_port     = 65535
+      protocol    = "tcp"
+      self = true
+      description = "For every new brick, one new port will be used starting at 49152"
+    }
+
+    ingress {
+      from_port   = 111
+      to_port     = 111
+      protocol    = "tcp"
+      self = true
+      description = "Gluster portmapper / tcp"
+    }
+
+      ingress {
+      from_port   = 111
+      to_port     = 111
+      protocol    = "udp"
+      self = true
+      description = "Gluster portmapper / udp"
+    }
 
   # Internal HTTP access from anywhere
   ingress {
